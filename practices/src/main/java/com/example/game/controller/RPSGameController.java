@@ -1,14 +1,17 @@
-package com.example.rps;
+package com.example.game.controller;
+
+import com.example.game.object.RPSGameObject;
+import com.example.game.processor.RPSGameProcessor;
 
 import java.util.Random;
 import java.util.Scanner;
 
-public class GameScannerProcessor {
+public class RPSGameController {
     private Scanner scanner;
-    private GameProcessor processor;
+    private RPSGameProcessor processor;
     private final Random random = new Random();
 
-    public GameScannerProcessor(Scanner scanner, GameProcessor processor) {
+    public RPSGameController(Scanner scanner, RPSGameProcessor processor) {
         this.setScanner(scanner);
         this.setProcessor(processor);
     }
@@ -20,7 +23,7 @@ public class GameScannerProcessor {
         this.scanner = scanner;
     }
 
-    public void setProcessor(GameProcessor processor) {
+    public void setProcessor(RPSGameProcessor processor) {
         if (processor == null) {
             throw new IllegalArgumentException();
         }
@@ -28,8 +31,8 @@ public class GameScannerProcessor {
     }
 
     public void computeGameResult() {
-        GameObject computerObject = GameObject.values()[this.random.nextInt(3)];
-        GameObject playerObject = GameObject.valueOf(this.scanner.nextLine());
+        RPSGameObject computerObject = RPSGameObject.values()[this.random.nextInt(3)];
+        RPSGameObject playerObject = RPSGameObject.valueOf(this.scanner.nextLine());
 
         this.processor.computeGameResult(playerObject, computerObject);
     }
@@ -38,7 +41,7 @@ public class GameScannerProcessor {
         return this.scanner;
     }
 
-    public GameProcessor getProcessor() {
+    public RPSGameProcessor getProcessor() {
         return this.processor;
     }
 }

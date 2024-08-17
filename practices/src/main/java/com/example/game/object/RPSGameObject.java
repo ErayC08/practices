@@ -1,9 +1,11 @@
-package com.example.rps;
+package com.example.game.object;
 
-public enum GameObject {
+import com.example.game.common.GameResult;
+
+public enum RPSGameObject {
     ROCK {
         @Override
-        public GameResult computeGameResult(GameObject other) {
+        public GameResult computeGameResult(RPSGameObject other) {
             if (other == null) {
                 throw new IllegalArgumentException();
             }
@@ -17,7 +19,7 @@ public enum GameObject {
         }
     }, PAPER {
         @Override
-        public GameResult computeGameResult(GameObject other) {
+        public GameResult computeGameResult(RPSGameObject other) {
             if (other == null) {
                 throw new IllegalArgumentException();
             }
@@ -31,7 +33,7 @@ public enum GameObject {
         }
     }, SCISSORS {
         @Override
-        public GameResult computeGameResult(GameObject other) {
+        public GameResult computeGameResult(RPSGameObject other) {
             if (other == null) {
                 throw new IllegalArgumentException();
             }
@@ -45,5 +47,5 @@ public enum GameObject {
         }
     };
 
-    public abstract GameResult computeGameResult(GameObject counter);
+    public abstract GameResult computeGameResult(RPSGameObject other);
 }

@@ -1,12 +1,15 @@
-package com.example.rps;
+package com.example.game.processor;
 
-public class GameProcessor {
+import com.example.game.object.RPSGameObject;
+import com.example.game.common.GameResult;
+
+public class RPSGameProcessor {
     private int wins = 0;
     private int losses = 0;
     private int draws = 0;
 
-    public void computeGameResult(GameObject playerObject, GameObject computerObject) {
-        GameResult status = playerObject.computeGameResult(computerObject);
+    public void computeGameResult(RPSGameObject playerMove, RPSGameObject computerMove) {
+        GameResult status = playerMove.computeGameResult(computerMove);
 
         if (status == GameResult.WIN) {
             this.wins++;
