@@ -8,6 +8,25 @@ public class RPSGameProcessor {
     private int losses = 0;
     private int draws = 0;
 
+    public void computeResult(int playerMoveIndex, int computerMoveIndex) {
+        RPSGameObject[] moves = RPSGameObject.values();
+
+        RPSGameObject playerMove = moves[playerMoveIndex];
+        RPSGameObject computerMove = moves[computerMoveIndex];
+
+        GameResult status = playerMove.computeResult(computerMove);
+
+        if (status == GameResult.WIN) {
+            this.wins++;
+        }
+        if (status == GameResult.LOSS) {
+            this.losses++;
+        }
+        if (status == GameResult.DRAW) {
+            this.draws++;
+        }
+    }
+
     public void computeResult(RPSGameObject playerMove, RPSGameObject computerMove) {
         GameResult status = playerMove.computeResult(computerMove);
 

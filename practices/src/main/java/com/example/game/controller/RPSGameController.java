@@ -1,6 +1,5 @@
 package com.example.game.controller;
 
-import com.example.game.object.RPSGameObject;
 import com.example.game.processor.RPSGameProcessor;
 
 import java.util.Random;
@@ -31,10 +30,10 @@ public class RPSGameController {
     }
 
     public void computeGameResult() {
-        RPSGameObject computerObject = RPSGameObject.values()[this.random.nextInt(3)];
-        RPSGameObject playerObject = RPSGameObject.valueOf(this.scanner.nextLine());
+        int computerMoveIndex = this.random.nextInt(3);
+        int playerMoveIndex = this.scanner.nextInt();
 
-        this.processor.computeResult(playerObject, computerObject);
+        this.processor.computeResult(playerMoveIndex, computerMoveIndex);
     }
 
     public Scanner getScanner() {
