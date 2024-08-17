@@ -1,7 +1,5 @@
 package com.example.rps;
 
-import com.example.game.GameResult;
-
 public enum GameObject {
     ROCK {
         @Override

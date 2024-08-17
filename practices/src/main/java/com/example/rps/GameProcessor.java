@@ -1,7 +1,5 @@
 package com.example.rps;
 
-import com.example.game.GameResult;
-
 public class GameProcessor {
     private int wins = 0;
     private int losses = 0;
