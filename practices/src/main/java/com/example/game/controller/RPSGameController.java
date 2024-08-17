@@ -34,7 +34,7 @@ public class RPSGameController {
         RPSGameObject computerObject = RPSGameObject.values()[this.random.nextInt(3)];
         RPSGameObject playerObject = RPSGameObject.valueOf(this.scanner.nextLine());
 
-        this.processor.computeGameResult(playerObject, computerObject);
+        this.processor.computeResult(playerObject, computerObject);
     }
 
     public Scanner getScanner() {

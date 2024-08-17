@@ -8,8 +8,8 @@ public class RPSGameProcessor {
     private int losses = 0;
     private int draws = 0;
 
-    public void computeGameResult(RPSGameObject playerMove, RPSGameObject computerMove) {
-        GameResult status = playerMove.computeGameResult(computerMove);
+    public void computeResult(RPSGameObject playerMove, RPSGameObject computerMove) {
+        GameResult status = playerMove.computeResult(computerMove);
 
         if (status == GameResult.WIN) {
             this.wins++;
