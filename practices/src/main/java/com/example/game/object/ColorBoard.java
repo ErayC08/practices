@@ -2,7 +2,7 @@ package com.example.game.object;
 
 import com.example.game.exception.IllegalColorArgumentException;
 
-public abstract class ColorBoard {
+public class ColorBoard {
     private final Color[][] colors;
 
     public ColorBoard(int rows, int cols) {
@@ -23,82 +23,111 @@ public abstract class ColorBoard {
         }
     }
 
-    public void setColor(int rowIndex, int colIndex, Color color) {
+    public boolean formsLine(int rowIndex, int colIndex, int length) {
+        boolean formsHorizontalLine = this.formsHorizontalLine(rowIndex, colIndex, length);
+        boolean formsVerticalLine = this.formsVerticalLine(rowIndex, colIndex, length);
+        boolean formsDiagonalLine = this.formsDiagonalLine(rowIndex, colIndex, length);
+
+        return formsHorizontalLine || formsVerticalLine || formsDiagonalLine;
+    }
+
+    public Color fillColumn(int colIndex, Color color) {
         if (color == null || color == Color.NONE) {
             throw new IllegalColorArgumentException();
         }
-        this.colors[rowIndex][colIndex] = color;
-    }
+        int rows = this.colors.length;
 
-    public abstract boolean involvesLine(int rowIndex, int colIndex, int length);
+        for (int i = rows - 1; 0 <= i; i--) {
+            Color next = this.colors[i][colIndex];
 
-    protected boolean involvesHorizontalLine(int rowIndex, int colIndex, int length) {
-        boolean involvesHorizontalLineWestSide = true;
-        boolean involvesHorizontalLineEastSide = true;
+            if (next == Color.NONE) {
+                this.colors[i][colIndex] = color;
 
-        Color center = this.getColor(rowIndex, colIndex);
-
-        for (int i = 1; i < length; i++) {
-            Color nextEastSide = this.getColor(rowIndex, colIndex + i);
-            Color nextWestSide = this.getColor(rowIndex, colIndex - i);
-
-            if (nextWestSide != center) {
-                involvesHorizontalLineWestSide = false;
-            }
-            if (nextEastSide != center) {
-                involvesHorizontalLineEastSide = false;
+                return null;
             }
         }
-        return involvesHorizontalLineEastSide || involvesHorizontalLineWestSide;
+        return color;
     }
 
-    protected boolean involvesVerticalLine(int rowIndex, int colIndex, int length) {
-        boolean involvesVerticalLineSouthSide = true;
-        boolean involvesVerticalLineNorthSide = true;
+    private boolean formsHorizontalLine(int rowIndex, int colIndex, int length) {
+        boolean formsHorizontalLineWestSide = true;
+        boolean formsHorizontalLineEastSide = true;
 
-        Color center = this.getColor(rowIndex, colIndex);
+        Color middle = this.colors[rowIndex][colIndex];
 
         for (int i = 1; i < length; i++) {
-            Color nextNorthSide = this.getColor(rowIndex - i, colIndex);
-            Color nextSouthSide = this.getColor(rowIndex + i, colIndex);
+            try {
+                Color nextEastSide = this.colors[rowIndex][colIndex + i];
+                Color nextWestSide = this.colors[rowIndex][colIndex - i];
 
-            if (nextSouthSide != center) {
-                involvesVerticalLineSouthSide = false;
-            }
-            if (nextNorthSide != center) {
-                involvesVerticalLineNorthSide = false;
+                if (nextWestSide != middle) {
+                    formsHorizontalLineWestSide = false;
+                }
+                if (nextEastSide != middle) {
+                    formsHorizontalLineEastSide = false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return false;
             }
         }
-        return involvesVerticalLineNorthSide || involvesVerticalLineSouthSide;
+        return formsHorizontalLineEastSide || formsHorizontalLineWestSide;
     }
 
-    protected boolean involvesDiagonalLine(int rowIndex, int colIndex, int length) {
-        boolean involvesDiagonalLineSouthWestSide = true;
-        boolean involvesDiagonalLineNorthWestSide = true;
-        boolean involvesDiagonalLineNorthEastSide = true;
-        boolean involvesDiagonalLineSouthEastSide = true;
+    private boolean formsVerticalLine(int rowIndex, int colIndex, int length) {
+        boolean formsVerticalLineSouthSide = true;
+        boolean formsVerticalLineNorthSide = true;
 
-        Color center = this.getColor(rowIndex, colIndex);
+        Color middle = this.colors[rowIndex][colIndex];
 
         for (int i = 1; i < length; i++) {
-            Color nextSouthWestSide = this.getColor(rowIndex + i, colIndex - i);
-            Color nextNorthWestSide = this.getColor(rowIndex - i, colIndex - i);
-            Color nextNorthEastSide = this.getColor(rowIndex - i, colIndex + i);
-            Color nextSouthEastSide = this.getColor(rowIndex + i, colIndex + i);
+            try {
+                Color nextNorthSide = this.colors[rowIndex - i][colIndex];
+                Color nextSouthSide = this.colors[rowIndex + i][colIndex];
 
-            if (nextSouthEastSide != center) {
-                involvesDiagonalLineSouthEastSide = false;
-            }
-            if (nextNorthEastSide != center) {
-                involvesDiagonalLineNorthEastSide = false;
-            }
-            if (nextNorthWestSide != center) {
-                involvesDiagonalLineNorthWestSide = false;
-            }
-            if (nextSouthWestSide != center) {
-                involvesDiagonalLineSouthWestSide = false;
+                if (nextSouthSide != middle) {
+                    formsVerticalLineSouthSide = false;
+                }
+                if (nextNorthSide != middle) {
+                    formsVerticalLineNorthSide = false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return false;
             }
         }
-        return involvesDiagonalLineSouthWestSide || involvesDiagonalLineNorthWestSide || involvesDiagonalLineNorthEastSide || involvesDiagonalLineSouthEastSide;
+        return formsVerticalLineNorthSide || formsVerticalLineSouthSide;
+    }
+
+    private boolean formsDiagonalLine(int rowIndex, int colIndex, int length) {
+        boolean formsDiagonalLineSouthWestSide = true;
+        boolean formsDiagonalLineNorthWestSide = true;
+        boolean formsDiagonalLineNorthEastSide = true;
+        boolean formsDiagonalLineSouthEastSide = true;
+
+        Color middle = this.colors[rowIndex][colIndex];
+
+        for (int i = 1; i < length; i++) {
+            try {
+                Color nextSouthWestSide = this.colors[rowIndex + i][colIndex - i];
+                Color nextNorthWestSide = this.colors[rowIndex - i][colIndex - i];
+                Color nextNorthEastSide = this.colors[rowIndex - i][colIndex + i];
+                Color nextSouthEastSide = this.colors[rowIndex + i][colIndex + i];
+
+                if (nextSouthEastSide != middle) {
+                    formsDiagonalLineSouthEastSide = false;
+                }
+                if (nextNorthEastSide != middle) {
+                    formsDiagonalLineNorthEastSide = false;
+                }
+                if (nextNorthWestSide != middle) {
+                    formsDiagonalLineNorthWestSide = false;
+                }
+                if (nextSouthWestSide != middle) {
+                    formsDiagonalLineSouthWestSide = false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return false;
+            }
+        }
+        return formsDiagonalLineSouthWestSide || formsDiagonalLineNorthWestSide || formsDiagonalLineNorthEastSide || formsDiagonalLineSouthEastSide;
     }
 }
